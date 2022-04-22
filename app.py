@@ -40,8 +40,19 @@ class Item(db.Model):
     orders = db.relationship("OrderItem", back_populates="item")
 	
     def __repr__(self):
-        return f'OrderItem: <{self.name}>'  
-             
+        return f'OrderItem: <{self.name}>'
+          
+  #Association table between Order and Item table
+class OrderItem(db.Model):
+    order_id =db.Column(db.ForeignKey('order.id'), primary_key=True)
+    item_id = db.Column(db.ForeignKey('item.id'), primary_key=True)
+    item_count = db.Column(db.Integer)
+    order = db.relationship("Order", back_populates="items")
+    item = db.relationship("Item", back_populates="orders")
+
+    def __repr__(self):
+        return f'OrderItem: <{self.item_id}>'
+           
 #Flask API routes
 
 @app.route('/')
