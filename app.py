@@ -115,6 +115,33 @@ def create_user():
     user = User(name=data['name'],email=data['email'])
     db.session.add(user)
     db.session.commit()
+    
+@app.route('/item/', methods=['POST'])
+def create_item():
+    data = request.get_json()
+
+    item = Item(name=data['name'])
+    db.session.add(item)
+    db.session.commit()
+
+    return { 'message': 'Item Created', 'item_id': item.id}
+
+@app.route('/order/', methods=['POST'])
+def create_order():
+    data = request.get_json()
+
+    order = Order(user_id=data['user_id'])
+    db.session.add(order)
+    db.session.commit()
+
+    for item in data['order_items']:
+        orderitem = OrderItem(order_id=order.id, item_id=item['item_id'], item_count=item['item_count'])
+        db.session.add(orderitem)
+    db.session.commit()
+
+    return { 'message': 'Order Created', 'order_id': order.id}
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=5000)
