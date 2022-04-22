@@ -52,6 +52,36 @@ class OrderItem(db.Model):
 
     def __repr__(self):
         return f'OrderItem: <{self.item_id}>'
+
+
+#Using Marchmallow to serialize JSON objects from DB queries
+ma = Marshmallow(app)
+
+class ItemSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Item
+
+class OrderItemSchema(ma.SQLAlchemyAutoSchema):
+    item = ma.Nested(ItemSchema)
+    class Meta:
+        model = OrderItem
+
+class OrderSchema(ma.SQLAlchemyAutoSchema):
+    items = ma.Nested(OrderItemSchema,many=True)
+    class Meta:
+        model = Order
+
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+
+user_schema = UserSchema()
+order_schema = OrderSchema()
+orders_schema = OrderSchema(many=True)
+item_schema = ItemSchema()
+items_schema = ItemSchema(many=True)
+orderitem_schema = OrderItemSchema()
+orderitems_schema = OrderItemSchema(many=True)
            
 #Flask API routes
 
