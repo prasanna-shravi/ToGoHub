@@ -89,6 +89,19 @@ orderitems_schema = OrderItemSchema(many=True)
 def main():
     return 'TOGOHUB Food Ordering App.'
 
+@app.route('/orders/')
+def get_all_orders():
+    all_orders = Order.query.all()
+    return jsonify(orders_schema.dump(all_orders))
 
+@app.route('/orders/<id>/')
+def get_user_orders(id):
+    user_orders = Order.query.filter_by(user_id=id).all()
+    return jsonify(orders_schema.dump(user_orders))
+
+@app.route('/order/<id>/')
+def get_order(id):
+    single_order = Order.query.filter_by(id=id).first_or_404()
+    return jsonify(order_schema.dump(single_order))
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=5000)
