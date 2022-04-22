@@ -32,7 +32,16 @@ class Order(db.Model):
 
     def __repr__(self):
         return f'Order <{self.id}>'
-        
+
+ #Item table
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    name = db.Column(db.String(20), nullable=False)
+    orders = db.relationship("OrderItem", back_populates="item")
+	
+    def __repr__(self):
+        return f'OrderItem: <{self.name}>'  
+             
 #Flask API routes
 
 @app.route('/')
