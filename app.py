@@ -41,7 +41,7 @@ class Item(db.Model):
 	
     def __repr__(self):
         return f'OrderItem: <{self.name}>'
-          
+
   #Association table between Order and Item table
 class OrderItem(db.Model):
     order_id =db.Column(db.ForeignKey('order.id'), primary_key=True)
@@ -103,5 +103,18 @@ def get_user_orders(id):
 def get_order(id):
     single_order = Order.query.filter_by(id=id).first_or_404()
     return jsonify(order_schema.dump(single_order))
+@app.route('/items/')
+def get_all_items():
+    all_items = Item.query.all()
+    return jsonify(items_schema.dump(all_items))
+
+@app.route('/user/', methods=['POST'])
+def create_user():
+    data = request.get_json()
+
+    user = User(name=data['name'],email=data['email'])
+    db.session.add(user)
+    db.session.commit()
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=5000)
