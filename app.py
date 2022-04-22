@@ -4,6 +4,14 @@ from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
+#Using default sqlite DB for storing data
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+
+#Using SQLAlchemy to create DB models
+db = SQLAlchemy(app)
+
+#DB Models for SQL Tables in our Database
+
 
 #Flask API routes
 
