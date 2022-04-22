@@ -23,6 +23,16 @@ class User(db.Model):
         return f'User <{self.name}>'
 
 
+#Order table
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # order_items=db.relationship('OrderItem', backref='order', lazy='dynamic')
+    items = db.relationship("OrderItem", back_populates="order")
+
+    def __repr__(self):
+        return f'Order <{self.id}>'
+        
 #Flask API routes
 
 @app.route('/')
